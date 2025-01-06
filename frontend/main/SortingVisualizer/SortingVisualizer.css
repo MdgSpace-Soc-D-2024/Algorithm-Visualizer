@@ -1,0 +1,43 @@
+.array-container {
+    width:fit-content;
+    top: 90px; 
+    display:inline-block;
+    
+  }
+
+.code{
+  display:inline-block;
+  padding: 10px;
+  width: 40%;
+  position: absolute;
+  right: 0px;
+  bottom: 90px;
+}
+.code p{
+  font-weight: bold;
+  text-align:left;
+  margin-bottom: 0%;
+  border-width: 5px;
+  border-bottom-width: 1.5px;
+  border-top-width:1.5px;
+  border-color:grey;
+  border-left-color: rgb(255, 179, 204);
+  border-right-color: rgb(255, 179, 204);
+  border-style: solid;
+}
+.array-bar {
+    width: 20px;
+    max-height: 660px;
+    display: inline-block;
+  
+      transition: transform 0.5s ease, background-color 0.3s ease;
+    
+
+  }
+.toolbox{
+  display:block;
+  position:absolute;
+  bottom: 10px;
+  right: 10px;
+  left: 10px;
+}
