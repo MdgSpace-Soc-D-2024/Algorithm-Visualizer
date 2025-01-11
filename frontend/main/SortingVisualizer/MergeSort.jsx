@@ -7,10 +7,10 @@ import Chat from "../src/Chat";
 
 const socket = io('http://localhost:8081');
 
-function SortingVisualizer() {
+function MergeSort() {
   const {user} = useUser();
   
-  const room="bubblesort";
+  const room="mergesort";
   const [showChat, setShowChat] = useState(false);
   
   useEffect(() => {
@@ -19,7 +19,7 @@ function SortingVisualizer() {
       setShowChat(true);
     }
   },[]);
-  
+
   const [modal, setModal] = useState(true);
   useEffect(() => {
     console.log('Modal state changed:', modal);
@@ -65,7 +65,7 @@ function SortingVisualizer() {
     setArray(a);
   };
 
-  async function bubbleSort() {
+  async function selectionSort() {
     const arrayBars = document.getElementsByClassName('array-bar');
   
     for (let bar of arrayBars) {
@@ -75,69 +75,40 @@ function SortingVisualizer() {
     await new Promise((resolve) => setTimeout(resolve, 200));
   
     for (let i = 0; i < array.length; i++) {
-    document.getElementById('code1').style.backgroundColor=" rgb(255, 179, 204)"
-    await new Promise((resolve) => setTimeout(resolve, 500));
-      for (let j = 0; j < array.length - i - 1; j++) {
-        document.getElementById('code1').style.backgroundColor="rgb(255, 255, 255)"
-        document.getElementById('code3').style.backgroundColor=" rgb(255, 179, 204)"
-        const barOneIdx = j;
-        const barTwoIdx = j + 1;
-        const barOneStyle = arrayBars[barOneIdx].style;
-        const barTwoStyle = arrayBars[barTwoIdx].style;
-  
-        barOneStyle.backgroundColor = SECONDARY_COLOR;
-        barTwoStyle.backgroundColor = SECONDARY_COLOR;
-  
-        await new Promise((resolve) => {
+    let minIndex = i;
+    const barOneIdx = i;
+    const barTwoIdx = minIndex;
+    
+      for (let j = i; j < array.length ; j++) {
+        if (array[minIndex] > array[j]) {
+            minIndex = j;}
+        } 
+
+            const barOneStyle = arrayBars[barOneIdx].style;
+            const barTwoStyle = arrayBars[barTwoIdx].style;
+            await new Promise((resolve) => {
+    
+            setTimeout(async() => {
+    
+                barOneStyle.transform = `translateX(${20*barTwoIdx}px)`;
+                barTwoStyle.transform = `translateX(${-20*barTwoIdx}px)`;
+    
+                setTimeout(() => {
+                    barOneStyle.transform = 'translateX(0)';
+                    barTwoStyle.transform = 'translateX(0)';
+                    const barOne = arrayBars[barOneIdx];
+                    const barTwo = arrayBars[barTwoIdx];
         
-          setTimeout(async() => {
+                    const parent = barOne.parentNode;
+                    parent.insertBefore(barTwo, barOne);
+                    resolve(); 
+                }, speedMs);}, speedMs);})
 
-            document.getElementById('code4').style.backgroundColor="  rgb(179, 255, 192)"
-            await new Promise((resolve) => setTimeout(resolve, 500));
-            document.getElementById('code4').style.backgroundColor="rgb(255, 255, 255)"
-
-            if (array[j] > array[j + 1]) {
-              document.getElementById('code5').style.backgroundColor=" rgb(255, 179, 204)"
-              // Swap values in the array
-              const temp = array[j];
-              array[j] = array[j + 1];
-              array[j + 1] = temp;
-  
-              barOneStyle.transform = 'translateX(20px)';
-              barTwoStyle.transform = 'translateX(-20px)';
-  
-              setTimeout(() => {
-                barOneStyle.transform = 'translateX(0)';
-                barTwoStyle.transform = 'translateX(0)';
-                const barOne = arrayBars[barOneIdx];
-                const barTwo = arrayBars[barTwoIdx];
-    
-                const parent = barOne.parentNode;
-                parent.insertBefore(barTwo, barOne);
-                resolve(); 
-              }, speedMs);
-            } else {
-              document.getElementById('code4').style.backgroundColor=" rgb(255, 0, 4)"
-              await new Promise((resolve) => setTimeout(resolve, 200));
-              resolve(); 
-            }
-          }, speedMs);
-        });
-        document.getElementById('code5').style.backgroundColor="rgb(245, 245, 245)"
-       
-        barOneStyle.backgroundColor = PRIMARY_COLOR;
-        barTwoStyle.backgroundColor = PRIMARY_COLOR;
       }
-      document.getElementById('code3').style.backgroundColor="rgb(245, 245, 245)"
+     
+    }
+  
     
-      arrayBars[array.length - i - 1].style.backgroundColor = PRIMARY_COLOR;
-    }
-  
-    for (let k = 0; k < array.length; k++) {
-      arrayBars[k].style.backgroundColor = PRIMARY_COLOR;
-    }
-  }
-  
 
   const [array, setArray] = useState([350, 340, 430, 320, 410, 580 ,290 ,370]);
  
@@ -150,7 +121,7 @@ function SortingVisualizer() {
         (<div className="modal">
             <div onClick={()=>setModal(false)} className="overlay"></div>
             <div className="modal-content">
-              <h2> What is Bubble Sort ?</h2>
+              <h2> What is Selection Sort ?</h2>
               <p>
                 content
               </p>
@@ -229,11 +200,11 @@ function SortingVisualizer() {
            {/* <button onClick={mergeSort}>Merge Sort</button>
            <button onClick={quickSort}>Quick Sort</button>
            <button onClick={heapSort}>Heap Sort</button> */}
-           <button onClick={bubbleSort}>Bubble Sort</button>
+           <button onClick={selectionSort}>Selection Sort</button>
            <button onClick={() =>{setModal(true)} }  className="btn-modal"> Open</button>
            {/* <button onClick={testSortingAlgorithms}>Test Sorting Algorithms (BROKEN) </button> */}
      </div></>
   )
 }
-export default SortingVisualizer
+export default MergeSort
 

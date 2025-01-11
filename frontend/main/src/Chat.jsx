@@ -2,14 +2,13 @@ import { useEffect, useState } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import PropTypes from 'prop-types'
 import axios from 'axios'
-
+import ReplyBox from "./Component/ReplyBox";
 function Chat({ socket, user, room }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
   const [replyMessage, setReplyMessage] = useState("");
   const [replyList, setReplyList] = useState([]);
   const [visibleReplies, setVisibleReplies] = useState({});
-
 
   const handleReplyClick = async(messageId) => {
   // Check if the messageId is valid
@@ -157,6 +156,8 @@ function Chat({ socket, user, room }) {
                   }} className="btn-reply">
                 {visibleReplies[messageContent.id] ? 'Hide Replies' : 'Reply'}
                 {console.log(visibleReplies[messageContent.id])}
+                {console.log(replyList)}
+                {console.log(messageList)}
                 </button>
                 </div>
                 
@@ -164,24 +165,12 @@ function Chat({ socket, user, room }) {
                   replyList.filter(reply => reply.replyId === messageContent.id)
                 .map((replyContent, replyIndex) =>
                    {       
-                  return (
-                    <div
-                     key={`${replyContent.replyId}*${replyIndex}`}
-                      className="reply"
-                      style={{borderStyle:"solid",borderColor:"grey",borderWidth:"1px",marginBottom:"5px", width:"90%",height:"auto",position:"relative",right:"0px", backgroundColor:"yellow"}}
-                    >
-                    {console.log(replyContent)}  
-                  {console.log(messageContent.id)  // Check the value of messageContent.id
-                  }
-                      <div className="reply-user">
-                          <p id="authorreply" style={{fontWeight:"bold", marginBottom:"0"}}>{replyContent.replyAuthor}</p>
-                          <p id="timereply" style={{color:"grey", fontSize:"10px", marginBottom:"0"}}>{replyContent.replyTime}  {replyContent.replyDate}</p>
-                      </div>
-                        <div className="reply-content">
-                          <p>{replyContent.replyMsg}</p>
-                        </div>
-                    </div>
-                      )})&&
+                  return ( <>
+                  {console.log(<ReplyBox key={replyIndex} replyId={replyContent.replyId} replyAuthor={replyContent.replyAuthor} replyMsg={replyContent.replyMsg} replyDate={replyContent.replyDate} replyTime={replyContent.replyTime}></ReplyBox>)}
+                        <ReplyBox key={replyIndex} replyId={replyContent.replyId} replyAuthor={replyContent.replyAuthor} replyMsg={replyContent.replyMsg} replyDate={replyContent.replyDate} replyTime={replyContent.replyTime}/>
+                        </>
+                      )})
+                      &&
                     
                       <div className="chat-footer">
                       <input

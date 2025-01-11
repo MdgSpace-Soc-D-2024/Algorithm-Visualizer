@@ -6,6 +6,7 @@ import Create from './Create'
 
 import Main from '../HomePage/HomePage'
 import SortingVisualizer from '../SortingVisualizer/SortingVisualizer'
+import MergeSort from '../SortingVisualizer/MergeSort'
 import { UserProvider } from './UserContext'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
                     <Route path="/home" element={<Main/>}/>
                     <Route path="/create" element={<Create/>}/>
                     <Route path="/" element={<SortingVisualizer/>}/>
+                    <Route path="/selectionsort" element={<MergeSort/>}/>
                 </Routes>
             </BrowserRouter>
         </UserProvider>
