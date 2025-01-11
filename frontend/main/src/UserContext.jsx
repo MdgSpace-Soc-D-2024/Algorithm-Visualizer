@@ -7,7 +7,7 @@ const UserContext = createContext();
 
 // Create a Provider
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState("user");
   const value = useMemo(() => ({ user, setUser }), [user]);
 
   return (

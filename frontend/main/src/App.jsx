@@ -14,8 +14,8 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/home" element={<Main/>}/>
-                    <Route path="/" element={<Create/>}/>
-                    <Route path="/bubblesort" element={<SortingVisualizer/>}/>
+                    <Route path="/create" element={<Create/>}/>
+                    <Route path="/" element={<SortingVisualizer/>}/>
                 </Routes>
             </BrowserRouter>
         </UserProvider>

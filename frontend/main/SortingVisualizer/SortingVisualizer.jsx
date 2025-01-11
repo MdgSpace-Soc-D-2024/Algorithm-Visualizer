@@ -205,7 +205,7 @@ function SortingVisualizer() {
       </div>
       )}
     </div>
-    <div className="toolbox" style={{position:"absolute" , right:"0px",left:"0px", justifyContent:"center"}}>
+    <div className="toolbox" style={{position:"absolute" , right:"0px",left:"0px",bottom:"0px", justifyContent:"center",padding:"5px"}}>
            <input type="number" placeholder="Length" onChange={(e) => { 
             if (e.target.value>0 && e.target.value<50){
               setBarsNo(e.target.value);

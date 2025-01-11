@@ -10,6 +10,7 @@ app.use(cors({
     origin: 'http://localhost:5173', 
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -23,13 +24,35 @@ const db= mysql.createPool({
 
 app.post("/mysql/community", (req, res) => {
     console.log("Request received:", req.body);
-    const sql = "INSERT INTO bubblesort (`room`,`author`, `message`,`date`,`time`) VALUES (?)";
+    const sql = "INSERT INTO bubblesort (`id`,`room`,`author`, `message`,`date`,`time`) VALUES (?)";
     const values = [
+        req.body.id,
         req.body.room,
         req.body.author,
         req.body.message,
         req.body.date,
         req.body.time
+    ];
+    console.log(values);
+    db.query(sql, [values],(err, result)=> {
+        if (err) {
+            console.error("Database Error:", err);
+            return res.json(err);
+        }
+        console.log("Database Insert Result:", result);
+        return res.json(result);
+    });
+});
+
+app.post("/mysql/replies", (req, res) => {
+    console.log("Request received:", req.body);
+    const sql = "INSERT INTO replies (`replyId`,`replyAuthor`, `replyMsg`,`replyDate`,`replyTime`) VALUES (?)";
+    const values = [
+        req.body.replyId,
+        req.body.replyAuthor,
+        req.body.replyMsg,
+        req.body.replyDate,
+        req.body.replyTime
     ];
     console.log(values);
     db.query(sql, [values],(err, result)=> {
@@ -74,6 +97,16 @@ app.get("/community",(req,res)=>{
     console.log("Request received");
     const value= req.query.value;
     const sql = "SELECT * FROM `bubblesort` WHERE room=?";
+    db.query(sql,[value],(err,result)=>{
+        if(err) return res.json({Message:"Error inside the server"});
+        return res.json(result);
+    })
+})
+
+app.get("/replies",(req,res)=>{
+    console.log("Request received");
+    const value= req.query.value;
+    const sql = "SELECT * FROM `replies` WHERE replyId=?";
     db.query(sql,[value],(err,result)=>{
         if(err) return res.json({Message:"Error inside the server"});
         return res.json(result);

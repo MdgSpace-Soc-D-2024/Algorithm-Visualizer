@@ -102,7 +102,7 @@ function Create(){
                     <div className="panel left-panel">
                         <div className="content">
                             <h3>Member of Brand?</h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque accusantium dolor, eos incidunt minima iure?</p>
+                            <p></p>
                             <button className="btn" id="sign-in-btn"  onClick={()=>{
                             const container = document.querySelector(".container"); 
                             container.classList.remove("sign-up-mode");}}>Sign in</button>
@@ -112,7 +112,7 @@ function Create(){
                     <div className="panel right-panel">
                         <div className="content">
                             <h3>New to Brand?</h3>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque accusantium dolor, eos incidunt minima iure?</p>
+                            <p></p>
                             <button className="btn" id="sign-up-btn"  onClick={()=>{
                             const container = document.querySelector(".container"); 
                             container.classList.add("sign-up-mode");}}>Sign up</button>
