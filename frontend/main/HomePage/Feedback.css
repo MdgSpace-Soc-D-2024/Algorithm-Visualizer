@@ -1,0 +1,104 @@
+/* General styles for body and form */
+
+
+.feedback-form-container {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.feedback-form-container h2 {
+    font-size: 1.75rem;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.feedback-form-container p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.feedback-form-container label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+/* Textarea and input styling */
+.feedback-form-container input,
+.feedback-form-container textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+.feedback-form-container input:focus,
+.feedback-form-container textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Button Styling */
+.feedback-form-container button {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.feedback-form-container button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    .feedback-form-container {
+        padding: 20px;
+        margin: 20px;
+    }
+
+    .feedback-form-container h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Thank you message styling */
+.thank-you-message {
+    text-align: center;
+    background-color: #e6f7ff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.thank-you-message h2 {
+    font-size: 1.75rem;
+    color: #007bff;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.thank-you-message p {
+    font-size: 1.1rem;
+    color: #333;
+}

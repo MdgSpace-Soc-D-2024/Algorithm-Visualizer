@@ -51,6 +51,21 @@ function SortingVisualizer() {
 
   const [barsNo , setBarsNo] = useState(8);
 
+  function swapDom(a,b) 
+  {
+       var aParent = a.parentNode;
+       var bParent = b.parentNode;
+  
+       var aHolder = document.createElement("div");
+       var bHolder = document.createElement("div");
+  
+       aParent.replaceChild(aHolder,a);
+       bParent.replaceChild(bHolder,b);
+  
+       aParent.replaceChild(b,aHolder);
+       bParent.replaceChild(a,bHolder);    
+  }
+  
 
   function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -92,19 +107,21 @@ function SortingVisualizer() {
         
           setTimeout(async() => {
 
-            document.getElementById('code4').style.backgroundColor="  rgb(179, 255, 192)"
-            await new Promise((resolve) => setTimeout(resolve, 500));
-            document.getElementById('code4').style.backgroundColor="rgb(255, 255, 255)"
+            document.getElementById('code4').style.backgroundColor="  rgb(255, 179, 204)"
+            await new Promise((resolve) => setTimeout(resolve, 200));
 
             if (array[j] > array[j + 1]) {
+              document.getElementById('code4').style.backgroundColor="  rgb(119, 255, 141)"
+            await new Promise((resolve) => setTimeout(resolve, 200));
+            document.getElementById('code4').style.backgroundColor="rgb(255, 255, 255)"
               document.getElementById('code5').style.backgroundColor=" rgb(255, 179, 204)"
               // Swap values in the array
               const temp = array[j];
               array[j] = array[j + 1];
               array[j + 1] = temp;
   
-              barOneStyle.transform = 'translateX(20px)';
-              barTwoStyle.transform = 'translateX(-20px)';
+              barOneStyle.transform = 'translateX(30px)';
+              barTwoStyle.transform = 'translateX(-30px)';
   
               setTimeout(() => {
                 barOneStyle.transform = 'translateX(0)';
@@ -112,24 +129,23 @@ function SortingVisualizer() {
                 const barOne = arrayBars[barOneIdx];
                 const barTwo = arrayBars[barTwoIdx];
     
-                const parent = barOne.parentNode;
-                parent.insertBefore(barTwo, barOne);
+                swapDom(barOne,barTwo)
                 resolve(); 
               }, speedMs);
             } else {
               document.getElementById('code4').style.backgroundColor=" rgb(255, 0, 4)"
               await new Promise((resolve) => setTimeout(resolve, 200));
+                          document.getElementById('code4').style.backgroundColor="rgb(255, 255, 255)"
               resolve(); 
             }
           }, speedMs);
         });
-        document.getElementById('code5').style.backgroundColor="rgb(245, 245, 245)"
+        document.getElementById('code5').style.backgroundColor="rgb(255, 255, 255)"
        
         barOneStyle.backgroundColor = PRIMARY_COLOR;
         barTwoStyle.backgroundColor = PRIMARY_COLOR;
       }
-      document.getElementById('code3').style.backgroundColor="rgb(245, 245, 245)"
-    
+      document.getElementById('code3').style.backgroundColor="rgb(255, 255, 255)"
       arrayBars[array.length - i - 1].style.backgroundColor = PRIMARY_COLOR;
     }
   
@@ -149,13 +165,13 @@ function SortingVisualizer() {
     {modal && 
         (<div className="modal">
             <div onClick={()=>setModal(false)} className="overlay"></div>
-            <div className="modal-content">
+            <div className="modal-content1">
               <h2> What is Bubble Sort ?</h2>
               <p>
                 content
               </p>
-              <button className="close-modal" onClick={()=>setModal(false)}>
-                CLOSE
+              <button className="close-modal1" onClick={()=>setModal(false)}>
+              ×
               </button>
             </div>
           </div>)}
@@ -199,8 +215,6 @@ function SortingVisualizer() {
         </div>
       ) : (<div>
         <Chat socket={socket} user={user} room={room} />
-        {/* <input type="text" placeholder="Ask the doubt" style={{width:"90%",height:"10%",position:"absolute", bottom:"0px",left:"0px"}}/>
-        <button style={{width:"10%",height:"10%",position:"absolute", bottom:"0px",right:"0px",}} onClick={() => joinCommunity()}>~</button> */}
       </div>
       )}
     </div>
@@ -226,12 +240,10 @@ function SortingVisualizer() {
             <option value="2">2</option>
             <option value="4">4</option>
           </select>
-           {/* <button onClick={mergeSort}>Merge Sort</button>
-           <button onClick={quickSort}>Quick Sort</button>
-           <button onClick={heapSort}>Heap Sort</button> */}
+
            <button onClick={bubbleSort}>Bubble Sort</button>
            <button onClick={() =>{setModal(true)} }  className="btn-modal"> Open</button>
-           {/* <button onClick={testSortingAlgorithms}>Test Sorting Algorithms (BROKEN) </button> */}
+
      </div></>
   )
 }

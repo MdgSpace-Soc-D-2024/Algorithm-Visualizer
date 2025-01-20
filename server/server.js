@@ -83,6 +83,28 @@ app.post("/mysql", (req, res) => {
         return res.json(result);
     });
 });
+app.post("/mysql/login", (req, res) => {
+    console.log("Request received:", req.body);
+    const sql = "SELECT * FROM userdata  WHERE Username=(?) AND Password= (?)";
+    const values = [
+        req.body.Username,
+        req.body.Password
+    ];
+    console.log(values);
+    db.query(sql, values,(err, result)=> {
+        if (err) {
+            console.error("Database Error:", err);
+            return res.json(err);
+        }
+        console.log(result);
+        if(result.length>0){
+            res.send(result);
+        }
+        else {
+            res.send({message:"Wrong username/passowrd combination!"})
+        }
+    });
+});
 
 db.getConnection((err, connection) => {
     if (err) {
@@ -115,8 +137,9 @@ app.get("/replies",(req,res)=>{
 
 app.get("/",(req,res)=>{
     console.log("Request received");
-    const sql = "SELECT * FROM `userdata`";
-    db.query(sql,(err,result)=>{
+    const value= req.query.value;
+    const sql = "SELECT * FROM `userdata` WHERE Username = ?";
+    db.query(sql,[value],(err,result)=>{
         if(err) return res.json({Message:"Error inside the server"});
         return res.json(result);
     })
@@ -131,6 +154,24 @@ app.get("/read/:email",(req,res)=>{
     })
 })
 
+app.put("/update", (req, res) => {
+    const values = [
+        req.body.Username,
+        req.body.Password,
+        req.query.value
+    ];
+    db.query(
+      "UPDATE userdata SET Username = ? , Password=? WHERE Email = ?",
+      values,
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          res.send(result);
+        }
+      }
+    );
+  });
 
 const server = http.createServer(app);
 

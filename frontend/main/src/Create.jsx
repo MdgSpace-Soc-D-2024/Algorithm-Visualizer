@@ -13,6 +13,32 @@ function Create(){
             Email: '',
             Password: ''
         })
+        const[valuesLogin, setValuesLogin] = useState({   
+            Username: '',
+            Password: ''
+        })
+
+        const handleSubmitLogin = (e) => {
+            e.preventDefault();
+            console.log("Values before sending:",valuesLogin); 
+        
+            axios.post('http://localhost:8081/mysql/login', valuesLogin)
+                .then(res => {
+                    console.log("Response:", res);
+                    console.log("Username:", valuesLogin.Username);
+                    if (res.data.message) 
+                    {
+                        alert(res.data.message); 
+                    }
+                    else{
+                        setUser(valuesLogin.Username);
+                        navigate('/home');
+                    }
+                })
+                .catch(err => {
+                    console.error("Error during Axios request:", err);
+                });
+        }
 
         const handleSubmit = (e) => {
             e.preventDefault();
@@ -34,15 +60,15 @@ function Create(){
         <div className="body_dup">
             <div className="container">
                 <div className="signin-signup">
-                    <form action="" className="sign-in-form">
+                    <form action="" className="sign-in-form" onSubmit={handleSubmitLogin}>
                         <h2 className="title">Sign in</h2>
                         <div className="input-field">
                             <i className="fas fa-user"></i>
-                            <input type="text" placeholder="Username" required />
+                            <input type="text" placeholder="Username" required  onChange={e=>setValuesLogin({...valuesLogin, Username: e.target.value})}/>
                         </div>
                         <div className="input-field">
                             <i className="fas fa-lock"></i>
-                            <input type="password" placeholder="Password" required />
+                            <input type="password" placeholder="Password" required onChange={e=>setValuesLogin({...valuesLogin, Password: e.target.value})}/>
                         </div>
                         <input type="submit" value="Login" className="btn" />
                         <p className="social-text">Or Sign in with social platform</p>
@@ -67,15 +93,15 @@ function Create(){
                         <h2 className="title">Sign up</h2>
                         <div className="input-field">
                             <i className="fas fa-user"></i>
-                            <input type="text" placeholder='Username' onChange={e=>setValues({...values, Username: e.target.value})}/>
+                            <input type="text" placeholder='Username' required onChange={e=>setValues({...values, Username: e.target.value})}/>
                         </div>
                         <div className="input-field">
                             <i className="fas fa-envelope"></i>
-                            <input type="email" placeholder ='Email' onChange={e=>setValues({...values, Email: e.target.value})}/>
+                            <input type="email" placeholder ='Email' required onChange={e=>setValues({...values, Email: e.target.value})}/>
                         </div>
                         <div className="input-field">
                             <i className="fas fa-lock"></i>
-                            <input type="password" placeholder='Password' onChange={e=>setValues({...values, Password: e.target.value})}/>
+                            <input type="password" placeholder='Password' required onChange={e=>setValues({...values, Password: e.target.value})}/>
                         </div>
                         <input type="submit" value="Sign up" className="btn" />
                         <p className="social-text">Or Sign in with social platform</p>

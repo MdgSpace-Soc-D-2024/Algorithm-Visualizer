@@ -5,10 +5,10 @@ import axios from 'axios'
 import ReplyBox from "./Component/ReplyBox";
 function Chat({ socket, user, room }) {
   const [currentMessage, setCurrentMessage] = useState("");
-  const [messageList, setMessageList] = useState([]);
-  const [replyMessage, setReplyMessage] = useState("");
-  const [replyList, setReplyList] = useState([]);
+  const [messageList , setMessageList] = useState([])
+  const [replyList , setReplyList] = useState([])
   const [visibleReplies, setVisibleReplies] = useState({});
+  const [replyMessage, setReplyMessage] = useState("");
 
   const handleReplyClick = async(messageId) => {
   // Check if the messageId is valid
@@ -28,7 +28,6 @@ function Chat({ socket, user, room }) {
       try {
         const res = await axios.get(`http://localhost:8081/replies?value=${messageId}`);
         
-        // Ensure only new replies that are not already in the list are added
         const newReplies = res.data.filter(
           (message) => !replyList.some((item) => item.id === message.id)
         );
@@ -162,16 +161,7 @@ function Chat({ socket, user, room }) {
                 </div>
                 
                 {visibleReplies[messageContent.id] && (
-                  replyList.filter(reply => reply.replyId === messageContent.id)
-                .map((replyContent, replyIndex) =>
-                   {       
-                  return ( <>
-                  {console.log(<ReplyBox key={replyIndex} replyId={replyContent.replyId} replyAuthor={replyContent.replyAuthor} replyMsg={replyContent.replyMsg} replyDate={replyContent.replyDate} replyTime={replyContent.replyTime}></ReplyBox>)}
-                        <ReplyBox key={replyIndex} replyId={replyContent.replyId} replyAuthor={replyContent.replyAuthor} replyMsg={replyContent.replyMsg} replyDate={replyContent.replyDate} replyTime={replyContent.replyTime}/>
-                        </>
-                      )})
-                      &&
-                    
+                  
                       <div className="chat-footer">
                       <input
                         key={messageContent.id}
@@ -188,6 +178,21 @@ function Chat({ socket, user, room }) {
                         }}
                       />
                       <button onClick={()=>{sendReply(messageContent.id)}} style={{position:"relative", bottom:0,right:0 , width:'10%',margin:0}}>&#9658;</button>
+                      {
+                  replyList.filter(reply => reply.replyId === messageContent.id)
+                .map((replyContent, replyIndex) =>{
+                  return (<>
+                  <ReplyBox
+                    key={replyIndex}
+                    replyId={replyContent.replyId}
+                    replyAuthor={replyContent.replyAuthor}
+                    replyMsg={replyContent.replyMsg}
+                    replyDate={replyContent.replyDate}
+                    replyTime={replyContent.replyTime}
+                    />
+                  </>
+                  )})
+                }
                     </div>
                 )}
               </div></>
