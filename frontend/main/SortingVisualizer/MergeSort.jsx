@@ -4,24 +4,24 @@ import io from 'socket.io-client';
 import "./Modal.css";
 import { useUser } from "../src/UserContext";
 import Chat from "../src/Chat";
+import { gsap } from "gsap";
 
 const socket = io('http://localhost:8081');
 
-
-function MergeSort() {
+function SortingVisualizer() {
   const {user} = useUser();
-
-  const room="mergesort";
+  
+  const room="bubblesort";
   const [showChat, setShowChat] = useState(false);
+  const [sorting, setSorting] = useState(false);
   
   useEffect(() => {
-    console.log(user);
     if (user !== "" && room !== "") {
       socket.emit("join_room", room);
       setShowChat(true);
     }
   },[]);
-
+  
   const [modal, setModal] = useState(true);
   useEffect(() => {
     console.log('Modal state changed:', modal);
@@ -35,13 +35,12 @@ function MergeSort() {
 
   const [speedMs, setSpeedMs] = useState(2000);
   
-  const code1="for (let i = 0; i < array.length-1; i++)"
+  const code1="for (let i = 0; i < array.length; i++)"
   const code2="{ "
-  const code13="  min_idx = i;"
-  const code3="   for (let j = i+1; j < array.length ; j++){"
-  const code4="        if (arr[j] < arr[min_idx])"
+  const code3="   for (let j = 0; j < array.length - i - 1; j++)"
+  const code4="     if (array[j] > array[j + 1])"
   const code5="        swap(array, j, j + 1); "
-  const code12="}};"
+  const code12="};"
   const code6="swap(array, j, j + 1)"
   const code7="{"
   const code8="   int temp=array[j];"
@@ -55,20 +54,20 @@ function MergeSort() {
   const [barsNo , setBarsNo] = useState(8);
 
   function swapDom(a,b) 
-{
-     var aParent = a.parentNode;
-     var bParent = b.parentNode;
-
-     var aHolder = document.createElement("div");
-     var bHolder = document.createElement("div");
-
-     aParent.replaceChild(aHolder,a);
-     bParent.replaceChild(bHolder,b);
-
-     aParent.replaceChild(b,aHolder);
-     bParent.replaceChild(a,bHolder);    
-}
-
+  {
+       var aParent = a.parentNode;
+       var bParent = b.parentNode;
+  
+       var aHolder = document.createElement("div");
+       var bHolder = document.createElement("div");
+  
+       aParent.replaceChild(aHolder,a);
+       bParent.replaceChild(bHolder,b);
+  
+       aParent.replaceChild(b,aHolder);
+       bParent.replaceChild(a,bHolder);    
+  }
+  
 
   function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -83,96 +82,91 @@ function MergeSort() {
     setArray(a);
   };
 
-  async function selectionSort() {
-    const arrayBars = document.getElementsByClassName('array-bar');
-    const widthBars=arrayBars[0].style.width;
-    console.log(widthBars);
-    for (let bar of arrayBars) {
-      bar.style.transform = 'translateX(0)';
-    }
-    
-    await new Promise((resolve) => setTimeout(resolve, 200));
-  
-    for (let i = 0; i < array.length-1; i++) {
-    let minIndex = i;
-    let barOneIdx = i;
-    let barTwoIdx = minIndex;
-    
-    document.getElementById('code1').style.backgroundColor=" rgb(255, 179, 204)"
-    let barOneStyle = arrayBars[barOneIdx].style;
-    let barTwoStyle = arrayBars[barTwoIdx].style;
-    barOneStyle.backgroundColor=SECONDARY_COLOR;
+  const mergeSort = async (arr, left, right) => {
+    if (left >= right) return;
 
-    await new Promise((resolve) => setTimeout(resolve, 400));
-      for (let j = i; j < array.length ; j++) {
-        document.getElementById('code1').style.backgroundColor="rgb(255, 255, 255)"
-        document.getElementById('code13').style.backgroundColor=" rgb(255, 179, 204)"
-        arrayBars[j].style.backgroundColor="green";
+    const mid = Math.floor(left + (right - left) / 2);
 
-        await new Promise((resolve) => setTimeout(resolve, 200));
-        document.getElementById('code3').style.backgroundColor=" rgb(255, 179, 204)"
-        document.getElementById('code13').style.backgroundColor=" rgb(255, 255, 255)"
-        await new Promise((resolve) => setTimeout(resolve, 200));
-        
-        document.getElementById('code4').style.backgroundColor="  rgb(255, 179, 204)"
-        await new Promise((resolve) => setTimeout(resolve, 200));
+    await mergeSort(arr, left, mid);
+    await mergeSort(arr, mid + 1, right);
+    await merge(arr, left, mid, right);
+  };
 
-        if (array[minIndex] > array[j]) {
-          barOneStyle.backgroundColor=PRIMARY_COLOR;
-          barTwoStyle.backgroundColor=PRIMARY_COLOR;
-          document.getElementById('code4').style.backgroundColor="  rgb(119, 255, 141)"
-          
+  const merge = async (arr, left, mid, right) => {
+    const n1 = mid - left + 1;
+    const n2 = right - mid;
 
-          await new Promise((resolve) => setTimeout(resolve, 200));
-          document.getElementById('code4').style.backgroundColor="rgb(255, 255, 255)"
-            document.getElementById('code5').style.backgroundColor=" rgb(255, 179, 204)"
-            minIndex = j;
-            barTwoIdx = minIndex;
-            barTwoStyle = arrayBars[barTwoIdx].style;
-            barTwoStyle.backgroundColor=SECONDARY_COLOR;
-            await new Promise((resolve) => setTimeout(resolve, 400));
-            
-        } 
-        else
-        {
-          arrayBars[j].style.backgroundColor=PRIMARY_COLOR;
-        document.getElementById('code4').style.backgroundColor=" rgb(255, 0, 4)"
-        await new Promise((resolve) => setTimeout(resolve, 200));
-        document.getElementById('code4').style.backgroundColor="rgb(255, 255, 255)"
-        }
-    };
-     document.getElementById('code5').style.backgroundColor="rgb(255, 255, 255)"
+    const L = new Array(n1);
+    const R = new Array(n2);
 
-    if(minIndex!==i){
-      const temp = array[minIndex];
-      array[minIndex] = array[i];
-      array[i] = temp;
-        await new Promise((resolve) => {
+    for (let i = 0; i < n1; i++) L[i] = arr[left + i];
+    for (let j = 0; j < n2; j++) R[j] = arr[mid + 1 + j];
 
-        setTimeout(async() => {
+    let i = 0,
+      j = 0,
+      k = left;
 
-            barOneStyle.transform = `translateX(${30*(barTwoIdx-i)}px)`;
-            barTwoStyle.transform = `translateX(${-30*(barTwoIdx-i)}px)`;
+    while (i < n1 && j < n2) {
+      const barLeft = document.getElementById(`bar-${left + i}`);
+      const barRight = document.getElementById(`bar-${mid + 1 + j}`);
 
-            setTimeout(() => {   
-               barOneStyle.transform = 'translateX(0)';
-                barTwoStyle.transform = 'translateX(0)';                                                                     
-                const barOne = arrayBars[barOneIdx];
-                const barTwo = arrayBars[barTwoIdx];
-                
-                swapDom(barOne,barTwo);
-
-                resolve(); 
-            }, speedMs);}, speedMs);})
-        barTwoStyle.backgroundColor=PRIMARY_COLOR;
-
+      if (L[i] <= R[j]) {
+        arr[k] = L[i];
+        gsap.to(barLeft, {
+          y: 20,
+          backgroundColor: "green",
+          duration: 1,
+        });
+        i++;
+      } else {
+        arr[k] = R[j];
+        gsap.to(barRight, {
+          y: 20,
+          backgroundColor: "red",
+          duration: 1,
+        });
+        j++;
       }
-      barOneStyle.backgroundColor=PRIMARY_COLOR;
-      document.getElementById('code3').style.backgroundColor="rgb(255, 255, 255)"
+      await new Promise((resolve) => setTimeout(resolve, speedMs));
+      k++;
     }
+
+    while (i < n1) {
+      const barLeft = document.getElementById(`bar-${left + i}`);
+      arr[k] = L[i];
+      gsap.to(barLeft, {
+        y: 20,
+        backgroundColor: "blue",
+        duration: 1,
+      });
+      i++;
+      k++;
+      await new Promise((resolve) => setTimeout(resolve, speedMs));
     }
+
+    while (j < n2) {
+      const barRight = document.getElementById(`bar-${mid + 1 + j}`);
+      arr[k] = R[j];
+      gsap.to(barRight, {
+        y: 20,
+        backgroundColor: "orange",
+        duration: 1,
+      });
+      j++;
+      k++;
+      await new Promise((resolve) => setTimeout(resolve, speedMs));
+    }
+ 
+    setArray([...arr]);
   
-    
+  };
+
+  const startSort = async () => {
+    setSorting(true);
+    const arrCopy = [...array];
+    await mergeSort(arrCopy, 0, arrCopy.length - 1);
+    setSorting(false);
+  };
 
   const [array, setArray] = useState([350, 340, 430, 320, 410, 580 ,290 ,370]);
  
@@ -185,7 +179,7 @@ function MergeSort() {
         (<div className="modal">
             <div onClick={()=>setModal(false)} className="overlay"></div>
             <div className="modal-content1">
-              <h2> What is Selection Sort ?</h2>
+              <h2> What is Bubble Sort ?</h2>
               <p>
                 content
               </p>
@@ -194,10 +188,11 @@ function MergeSort() {
               </button>
             </div>
           </div>)}
-      <div className="array-container" style={{ position: "relative" ,left:"45%"}}>
+      <div className="array-container" style={{ position: "absolute" ,left:"45%"}}>
       
       {array.map((value, idx) => (
        <div
+                id={`bar-${idx}`}
            className="array-bar"
            key={idx}
            style={{
@@ -214,7 +209,6 @@ function MergeSort() {
        <pre style={{ display:"inline"}}>
         <p id="code1">{code1}</p>  
         <p id="code2">{code2}</p>
-        <p id="code13">{code13}</p>
         <p id="code3">{code3}</p>
         <p id="code4">{code4}</p>
         <p id="code5">{code5}</p>
@@ -235,7 +229,6 @@ function MergeSort() {
         </div>
       ) : (<div>
         <Chat socket={socket} user={user} room={room} />
-       
       </div>
       )}
     </div>
@@ -261,11 +254,12 @@ function MergeSort() {
             <option value="2">2</option>
             <option value="4">4</option>
           </select>
-     
-           <button onClick={selectionSort}>Selection Sort</button>
+
+           <button onClick={startSort}>Merge Sort</button>
            <button onClick={() =>{setModal(true)} }  className="btn-modal"> Open</button>
+
      </div></>
   )
 }
-export default MergeSort
+export default SortingVisualizer
 

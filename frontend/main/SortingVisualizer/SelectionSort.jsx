@@ -7,19 +7,21 @@ import Chat from "../src/Chat";
 
 const socket = io('http://localhost:8081');
 
-function SortingVisualizer() {
+
+function SelectionSort() {
   const {user} = useUser();
-  
-  const room="bubblesort";
+
+  const room="selectionsort";
   const [showChat, setShowChat] = useState(false);
   
   useEffect(() => {
+    console.log(user);
     if (user !== "" && room !== "") {
       socket.emit("join_room", room);
       setShowChat(true);
     }
   },[]);
-  
+
   const [modal, setModal] = useState(true);
   useEffect(() => {
     console.log('Modal state changed:', modal);
@@ -33,12 +35,13 @@ function SortingVisualizer() {
 
   const [speedMs, setSpeedMs] = useState(2000);
   
-  const code1="for (let i = 0; i < array.length; i++)"
+  const code1="for (let i = 0; i < array.length-1; i++)"
   const code2="{ "
-  const code3="   for (let j = 0; j < array.length - i - 1; j++)"
-  const code4="     if (array[j] > array[j + 1])"
+  const code13="  min_idx = i;"
+  const code3="   for (let j = i+1; j < array.length ; j++){"
+  const code4="        if (arr[j] < arr[min_idx])"
   const code5="        swap(array, j, j + 1); "
-  const code12="};"
+  const code12="}};"
   const code6="swap(array, j, j + 1)"
   const code7="{"
   const code8="   int temp=array[j];"
@@ -52,20 +55,20 @@ function SortingVisualizer() {
   const [barsNo , setBarsNo] = useState(8);
 
   function swapDom(a,b) 
-  {
-       var aParent = a.parentNode;
-       var bParent = b.parentNode;
-  
-       var aHolder = document.createElement("div");
-       var bHolder = document.createElement("div");
-  
-       aParent.replaceChild(aHolder,a);
-       bParent.replaceChild(bHolder,b);
-  
-       aParent.replaceChild(b,aHolder);
-       bParent.replaceChild(a,bHolder);    
-  }
-  
+{
+     var aParent = a.parentNode;
+     var bParent = b.parentNode;
+
+     var aHolder = document.createElement("div");
+     var bHolder = document.createElement("div");
+
+     aParent.replaceChild(aHolder,a);
+     bParent.replaceChild(bHolder,b);
+
+     aParent.replaceChild(b,aHolder);
+     bParent.replaceChild(a,bHolder);    
+}
+
 
   function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -80,80 +83,96 @@ function SortingVisualizer() {
     setArray(a);
   };
 
-  async function bubbleSort() {
+  async function selectionSort() {
     const arrayBars = document.getElementsByClassName('array-bar');
-  
+    const widthBars=arrayBars[0].style.width;
+    console.log(widthBars);
     for (let bar of arrayBars) {
       bar.style.transform = 'translateX(0)';
     }
     
     await new Promise((resolve) => setTimeout(resolve, 200));
   
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0; i < array.length-1; i++) {
+    let minIndex = i;
+    let barOneIdx = i;
+    let barTwoIdx = minIndex;
+    
     document.getElementById('code1').style.backgroundColor=" rgb(255, 179, 204)"
-    await new Promise((resolve) => setTimeout(resolve, 500));
-      for (let j = 0; j < array.length - i - 1; j++) {
+    let barOneStyle = arrayBars[barOneIdx].style;
+    let barTwoStyle = arrayBars[barTwoIdx].style;
+    barOneStyle.backgroundColor=SECONDARY_COLOR;
+
+    await new Promise((resolve) => setTimeout(resolve, 400));
+      for (let j = i; j < array.length ; j++) {
         document.getElementById('code1').style.backgroundColor="rgb(255, 255, 255)"
+        document.getElementById('code13').style.backgroundColor=" rgb(255, 179, 204)"
+        arrayBars[j].style.backgroundColor="green";
+
+        await new Promise((resolve) => setTimeout(resolve, 200));
         document.getElementById('code3').style.backgroundColor=" rgb(255, 179, 204)"
-        const barOneIdx = j;
-        const barTwoIdx = j + 1;
-        const barOneStyle = arrayBars[barOneIdx].style;
-        const barTwoStyle = arrayBars[barTwoIdx].style;
-  
-        barOneStyle.backgroundColor = SECONDARY_COLOR;
-        barTwoStyle.backgroundColor = SECONDARY_COLOR;
-  
-        await new Promise((resolve) => {
+        document.getElementById('code13').style.backgroundColor=" rgb(255, 255, 255)"
+        await new Promise((resolve) => setTimeout(resolve, 200));
         
-          setTimeout(async() => {
+        document.getElementById('code4').style.backgroundColor="  rgb(255, 179, 204)"
+        await new Promise((resolve) => setTimeout(resolve, 200));
 
-            document.getElementById('code4').style.backgroundColor="  rgb(255, 179, 204)"
-            await new Promise((resolve) => setTimeout(resolve, 200));
+        if (array[minIndex] > array[j]) {
+          barOneStyle.backgroundColor=PRIMARY_COLOR;
+          barTwoStyle.backgroundColor=PRIMARY_COLOR;
+          document.getElementById('code4').style.backgroundColor="  rgb(119, 255, 141)"
+          
 
-            if (array[j] > array[j + 1]) {
-              document.getElementById('code4').style.backgroundColor="  rgb(119, 255, 141)"
-              await new Promise((resolve) => setTimeout(resolve, 200));
-              document.getElementById('code4').style.backgroundColor="rgb(255, 255, 255)"
-              document.getElementById('code5').style.backgroundColor=" rgb(255, 179, 204)"
-              // Swap values in the array
-              const temp = array[j];
-              array[j] = array[j + 1];
-              array[j + 1] = temp;
-  
-              barOneStyle.transform = 'translateX(30px)';
-              barTwoStyle.transform = 'translateX(-30px)';
-  
-              setTimeout(() => {
-                barOneStyle.transform = 'translateX(0)';
-                barTwoStyle.transform = 'translateX(0)';
+          await new Promise((resolve) => setTimeout(resolve, 200));
+          document.getElementById('code4').style.backgroundColor="rgb(255, 255, 255)"
+            document.getElementById('code5').style.backgroundColor=" rgb(255, 179, 204)"
+            minIndex = j;
+            barTwoIdx = minIndex;
+            barTwoStyle = arrayBars[barTwoIdx].style;
+            barTwoStyle.backgroundColor=SECONDARY_COLOR;
+            await new Promise((resolve) => setTimeout(resolve, 400));
+            
+        } 
+        else
+        {
+          arrayBars[j].style.backgroundColor=PRIMARY_COLOR;
+        document.getElementById('code4').style.backgroundColor=" rgb(255, 0, 4)"
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        document.getElementById('code4').style.backgroundColor="rgb(255, 255, 255)"
+        }
+    };
+     document.getElementById('code5').style.backgroundColor="rgb(255, 255, 255)"
+
+    if(minIndex!==i){
+      const temp = array[minIndex];
+      array[minIndex] = array[i];
+      array[i] = temp;
+        await new Promise((resolve) => {
+
+        setTimeout(async() => {
+
+            barOneStyle.transform = `translateX(${30*(barTwoIdx-i)}px)`;
+            barTwoStyle.transform = `translateX(${-30*(barTwoIdx-i)}px)`;
+
+            setTimeout(() => {   
+               barOneStyle.transform = 'translateX(0)';
+                barTwoStyle.transform = 'translateX(0)';                                                                     
                 const barOne = arrayBars[barOneIdx];
                 const barTwo = arrayBars[barTwoIdx];
-    
-                swapDom(barOne,barTwo)
+                
+                swapDom(barOne,barTwo);
+
                 resolve(); 
-              }, speedMs);
-            } else {
-              document.getElementById('code4').style.backgroundColor=" rgb(255, 0, 4)"
-              await new Promise((resolve) => setTimeout(resolve, 200));
-                          document.getElementById('code4').style.backgroundColor="rgb(255, 255, 255)"
-              resolve(); 
-            }
-          }, speedMs);
-        });
-        document.getElementById('code5').style.backgroundColor="rgb(255, 255, 255)"
-       
-        barOneStyle.backgroundColor = PRIMARY_COLOR;
-        barTwoStyle.backgroundColor = PRIMARY_COLOR;
+            }, speedMs);}, speedMs);})
+        barTwoStyle.backgroundColor=PRIMARY_COLOR;
+
       }
+      barOneStyle.backgroundColor=PRIMARY_COLOR;
       document.getElementById('code3').style.backgroundColor="rgb(255, 255, 255)"
-      arrayBars[array.length - i - 1].style.backgroundColor = PRIMARY_COLOR;
+    }
     }
   
-    for (let k = 0; k < array.length; k++) {
-      arrayBars[k].style.backgroundColor = PRIMARY_COLOR;
-    }
-  }
-  
+    
 
   const [array, setArray] = useState([350, 340, 430, 320, 410, 580 ,290 ,370]);
  
@@ -166,7 +185,7 @@ function SortingVisualizer() {
         (<div className="modal">
             <div onClick={()=>setModal(false)} className="overlay"></div>
             <div className="modal-content1">
-              <h2> What is Bubble Sort ?</h2>
+              <h2> What is Selection Sort ?</h2>
               <p>
                 content
               </p>
@@ -175,7 +194,7 @@ function SortingVisualizer() {
               </button>
             </div>
           </div>)}
-      <div className="array-container" style={{ position: "absolute" ,left:"45%"}}>
+      <div className="array-container" style={{ position: "relative" ,left:"45%"}}>
       
       {array.map((value, idx) => (
        <div
@@ -195,6 +214,7 @@ function SortingVisualizer() {
        <pre style={{ display:"inline"}}>
         <p id="code1">{code1}</p>  
         <p id="code2">{code2}</p>
+        <p id="code13">{code13}</p>
         <p id="code3">{code3}</p>
         <p id="code4">{code4}</p>
         <p id="code5">{code5}</p>
@@ -215,6 +235,7 @@ function SortingVisualizer() {
         </div>
       ) : (<div>
         <Chat socket={socket} user={user} room={room} />
+       
       </div>
       )}
     </div>
@@ -240,12 +261,10 @@ function SortingVisualizer() {
             <option value="2">2</option>
             <option value="4">4</option>
           </select>
-
-           <button onClick={bubbleSort}>Bubble Sort</button>
+     
+           <button onClick={selectionSort}>Selection Sort</button>
            <button onClick={() =>{setModal(true)} }  className="btn-modal"> Open</button>
-
      </div></>
   )
 }
-export default SortingVisualizer
-
+export default SelectionSort

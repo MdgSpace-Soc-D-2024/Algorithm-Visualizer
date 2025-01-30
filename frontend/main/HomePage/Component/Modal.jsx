@@ -23,7 +23,7 @@ function Modal({ isOpen, onClose, algorithm }) {
         </button>
         <button  className="learn-more-btn"
           onClick={() => navigate(algorithm?.navlink)}>
-          Visuaize
+          Visualize
         </button>
       </div>
     </div>

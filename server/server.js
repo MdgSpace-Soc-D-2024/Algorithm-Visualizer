@@ -3,6 +3,7 @@ import mysql from 'mysql'
 import cors from 'cors'
 import {Server} from 'socket.io'
 import * as http from 'http';
+import { replies } from './controllers/chat.controllers.js';
 
 const app = express();
 
@@ -44,26 +45,7 @@ app.post("/mysql/community", (req, res) => {
     });
 });
 
-app.post("/mysql/replies", (req, res) => {
-    console.log("Request received:", req.body);
-    const sql = "INSERT INTO replies (`replyId`,`replyAuthor`, `replyMsg`,`replyDate`,`replyTime`) VALUES (?)";
-    const values = [
-        req.body.replyId,
-        req.body.replyAuthor,
-        req.body.replyMsg,
-        req.body.replyDate,
-        req.body.replyTime
-    ];
-    console.log(values);
-    db.query(sql, [values],(err, result)=> {
-        if (err) {
-            console.error("Database Error:", err);
-            return res.json(err);
-        }
-        console.log("Database Insert Result:", result);
-        return res.json(result);
-    });
-});
+app.post("/mysql/replies", replies  )
 
 app.post("/mysql", (req, res) => {
     console.log("Request received:", req.body);

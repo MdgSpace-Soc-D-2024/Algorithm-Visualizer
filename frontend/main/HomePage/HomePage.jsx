@@ -28,11 +28,19 @@ const algorithmInfo = {
     learnMoreUrl: "https://www.geeksforgeeks.org/selection-sort-algorithm-2/",
     navlink:"/selectionsort"
   },
+  insertion: {
+    title: "Insertion Sort Algorithm",
+    description: "Insertion sort is a simple sorting algorithm that works by iteratively inserting each element of an unsorted list into its correct position in a sorted portion of the list.",
+    complexity: { time: "O(n2)", space: "O(1)" },
+    learnMoreUrl: "https://www.geeksforgeeks.org/insertion-sort-algorithm/",
+    navlink:"/insertionsort"
+  },
   merge: {
     title: "Merge Sort Algorithm",
     description: "Merge Sort is a divide-and-conquer algorithm that recursively breaks down a problem into smaller, more manageable subproblems until they become simple enough to solve directly.",
     complexity: { time: "O(n log n)", space: "O(n)" },
-    learnMoreUrl: "https://en.wikipedia.org/wiki/Merge_sort"
+    learnMoreUrl: "https://en.wikipedia.org/wiki/Merge_sort",
+    navlink:"/mergesort"
   }
 };
 
@@ -43,8 +51,8 @@ const algorithmSections = [
       { key: "bubble", title: "Bubble Sort", description: "Visualize bubble sort algorithm in action" },
       { key: "selection", title: "Selection Sort", description: "Visualize selection sort algorithm in action" },
       { key: "quick", title: "Quick Sort", description: "Visualize quick sort algorithm in action" },
-      { key: "merge", title: "Merge Sort", description: "Visualize merge sort algorithm in action" },
-      { key: "insertion", title: "Insertion Sort", description: "Visualize insertion sort algorithm in action" }
+      { key: "insertion", title: "Insertion Sort", description: "Visualize insertion sort algorithm in action" },
+      { key: "merge", title: "Merge Sort", description: "Visualize merge sort algorithm in action" }
     ]
   },
   {
